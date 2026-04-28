@@ -10,18 +10,6 @@ Standalone HTML/CSS/JS prototype of the new Rebar Inspection Tool UI.
 3. Drop a sample rebar photo at `assets/sample-rebar.jpg` (optional).
 4. Open any `.html` file by double-clicking it.
 
-## Pages
-
-| File | Page |
-|---|---|
-| `login.html` | Login screen |
-| `projects.html` | All projects list |
-| `project.html` | Single project (Info & docs / Locations) |
-| `location.html` | Location with drawing + control points |
-| `control-point.html` | Control point with requirements + capture sessions |
-| `capture.html` | Live camera capture |
-| `preview.html` | Just-captured preview (single + gallery) |
-| `annotation.html` | Annotation / measurement workspace |
 
 ## Note for testing
 
