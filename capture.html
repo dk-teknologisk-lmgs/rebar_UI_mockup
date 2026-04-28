@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Capture — CA-03</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/capture-annotation.css">
+</head>
+<body>
+
+<div class="app-shell capture-shell">
+
+  <header class="master-header">
+    <div class="master-logo">
+      <img src="assets/logo.png" alt="" onerror="this.style.display='none'">
+      <span class="master-logo-fallback">REBAR INSPECTION</span>
+    </div>
+
+    <div class="master-divider"></div>
+
+    <nav class="master-nav">
+      <a href="projects.html">Projects</a>
+      <span class="sep">▸</span>
+      <a href="project-workspace.html">Sønderborg Multihus</a>
+      <span class="sep">▸</span>
+      <a href="project-workspace.html">Floor 2 — East Wall</a>
+      <span class="sep">▸</span>
+      <a href="project-workspace.html">★ CA-03</a>
+      <span class="sep">▸</span>
+      <span class="current">Capture</span>
+    </nav>
+
+<div class="master-actions">
+  <div class="user-menu">
+    <button class="user-dropdown-btn">Lylian Goes ▾</button>
+    <div class="user-dropdown-panel">
+      <a href="#" class="user-dropdown-item">Account</a>
+      <a href="login.html" class="user-dropdown-item">Log out</a>
+    </div>
+  </div>
+</div>
+  </header>
+
+  <div class="brand-strip"></div>
+
+  <header class="app-topbar">
+    <div class="breadcrumb">
+      <span class="current">Sønderborg ▸ Floor 2 — East Wall ▸ CA-03</span>
+    </div>
+    <div class="topbar-actions">
+      <a class="btn" href="project-workspace.html">Back to control point</a>
+    </div>
+  </header>
+
+  <div class="fullstage">
+    <div class="media-stage">
+      <div class="media-stage-inner">
+        <div class="media-stage-label">LIVE CAMERA FEED</div>
+
+        <div class="live-feed-frame"></div>
+
+        <div class="view-toggle">
+          <button class="active" id="rgbBtn">RGB</button>
+          <button id="rgbdBtn">RGB-D</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="capture-bottom-bar">
+      <div class="capture-status-note">Captures are saved by default</div>
+
+      <div class="shutter-wrap">
+        <a href="preview-single.html">
+          <button class="shutter-button" title="Take picture"></button>
+        </a>
+
+        <div class="capture-mode-toggle">
+          <button id="videoModeBtn">Video</button>
+          <button id="photoModeBtn" class="active">Photo</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const rgbBtn = document.getElementById('rgbBtn');
+  const rgbdBtn = document.getElementById('rgbdBtn');
+  const liveFeed = document.querySelector('.live-feed-frame');
+
+  rgbBtn.addEventListener('click', () => {
+    rgbBtn.classList.add('active');
+    rgbdBtn.classList.remove('active');
+    liveFeed.style.backgroundImage = "url('assets/sample-rebar.jpg')";
+  });
+
+  rgbdBtn.addEventListener('click', () => {
+    rgbdBtn.classList.add('active');
+    rgbBtn.classList.remove('active');
+    liveFeed.style.backgroundImage = "url('assets/sample-depth.jpg'), url('assets/sample-rebar.jpg')";
+    liveFeed.style.backgroundBlendMode = 'screen';
+    liveFeed.style.backgroundColor = '#000';
+    liveFeed.style.backgroundSize = 'contain, contain';
+    liveFeed.style.backgroundRepeat = 'no-repeat, no-repeat';
+    liveFeed.style.backgroundPosition = 'center, center';
+  });
+
+  const videoBtn = document.getElementById('videoModeBtn');
+  const photoBtn = document.getElementById('photoModeBtn');
+  videoBtn.addEventListener('click', () => {
+    videoBtn.classList.add('active');
+    photoBtn.classList.remove('active');
+  });
+  photoBtn.addEventListener('click', () => {
+    photoBtn.classList.add('active');
+    videoBtn.classList.remove('active');
+  });
+</script>
+
+<script>
+  document.querySelectorAll('.user-menu').forEach(menu => {
+    const btn = menu.querySelector('.user-dropdown-btn');
+    const panel = menu.querySelector('.user-dropdown-panel');
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.querySelectorAll('.user-dropdown-panel').forEach(p => {
+        if (p !== panel) p.classList.remove('open');
+      });
+      panel.classList.toggle('open');
+    });
+  });
+
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.user-dropdown-panel').forEach(panel => {
+      panel.classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>

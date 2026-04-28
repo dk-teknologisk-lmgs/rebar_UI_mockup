@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Login — Rebar Inspection Tool</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/management-pages.css">
+</head>
+<body>
+
+<div class="page-wrap login-stage">
+  <div class="brand-strip"></div>
+
+
+  <div class="login-panel-wrap">
+    <img class="login-logo-corner" src="assets/logo.png" alt="" onerror="this.style.display='none'">
+
+    <div class="login-card">
+      <h1 class="login-title">Rebar Inspection Tool</h1>
+
+      <label class="form-label">Username</label>
+      <input class="form-control" type="text" value="Imgs">
+
+      <label class="form-label">Password</label>
+      <input class="form-control" type="password" value="password">
+
+      <a href="projects.html">
+        <button class="btn btn-primary">Log in</button>
+      </a>
+    </div>
+  </div>
+
+  <div class="page-footnote">
+    Hardcoded users in data/app/users.json. Field name "passwordHash" so future swap to real auth is non-breaking.
+  </div>
+</div>
+
+</body>
+</html>

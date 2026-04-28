@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Preview Image — Capture</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/capture-annotation.css">
+  <style>
+  .preview-page-shell {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 56px 1fr 56px;
+    grid-template-rows: 1fr auto;
+    min-height: 0;
+    background: var(--color-bg);
+    overflow: hidden;
+  }
+
+  .preview-main-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 16px 8px;
+    min-width: 0;
+    min-height: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .preview-large-image {
+    width: 100%;
+    max-width: 980px;
+    height: min(65vh, 750px);
+    border: 1px solid var(--color-border);
+    background: #ddd center/contain no-repeat;
+    margin-bottom: 4px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .preview-floating-actions {
+    position: relative;
+    margin-top: -22px;
+    z-index: 5;
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-bottom: 10px;
+    flex-shrink: 0;
+  }
+
+  .preview-thumb-strip {
+    width: 100%;
+    max-width: 980px;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 6px 0 2px;
+    flex-shrink: 0;
+  }
+
+  .preview-thumb {
+    width: 110px;
+    height: 72px;
+    flex: 0 0 auto;
+    border: 2px solid var(--color-border);
+    background: #ddd center/cover no-repeat;
+    cursor: pointer;
+  }
+
+  .preview-thumb.alt {
+    background-image: url('assets/sample-frame-2.jpg');
+  }
+
+  .preview-thumb.active {
+    border-color: var(--color-primary);
+  }
+
+  .preview-nav-col {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    user-select: none;
+    color: var(--color-text);
+  }
+
+  .preview-nav-col span {
+    cursor: pointer;
+    opacity: 0.8;
+  }
+
+  .preview-nav-col span:hover {
+    opacity: 1;
+  }
+
+  .preview-caption-bar {
+    grid-column: 1 / -1;
+    background: white;
+    border-top: 1px solid var(--color-border);
+    padding: 8px 16px;
+    font-size: 12px;
+    color: var(--color-text-muted);
+    font-style: italic;
+    min-height: 34px;
+  }
+
+  .round-icon-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 1px solid var(--color-primary);
+    background: white;
+    color: var(--color-primary);
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .round-icon-btn:hover {
+    background: var(--color-primary-soft);
+  }
+</style>
+  </style>
+</head>
+<body>
+
+<div class="app-shell preview-shell">
+
+  <header class="master-header">
+    <div class="master-logo">
+      <img src="assets/logo.png" alt="" onerror="this.style.display='none'">
+      <span class="master-logo-fallback">REBAR INSPECTION</span>
+    </div>
+
+    <div class="master-divider"></div>
+
+    <nav class="master-nav">
+      <a href="projects.html">Projects</a>
+      <span class="sep">▸</span>
+      <a href="project-workspace.html">Sønderborg Multihus</a>
+      <span class="sep">▸</span>
+      <a href="project-workspace.html">Floor 2 — East Wall</a>
+      <span class="sep">▸</span>
+      <a href="project-workspace.html">★ CA-03</a>
+      <span class="sep">▸</span>
+      <span class="current">Capture preview</span>
+    </nav>
+
+<div class="master-actions">
+  <div class="user-menu">
+    <button class="user-dropdown-btn">Lylian Goes ▾</button>
+    <div class="user-dropdown-panel">
+      <a href="#" class="user-dropdown-item">Account</a>
+      <a href="login.html" class="user-dropdown-item">Log out</a>
+    </div>
+  </div>
+</div>
+  </header>
+
+  <div class="brand-strip"></div>
+
+  <header class="app-topbar">
+    <div class="breadcrumb">
+      <span class="current">Captured image preview</span>
+    </div>
+    <div class="topbar-actions">
+      <a class="btn" href="project-workspace.html">Back to control point</a>
+    </div>
+  </header>
+
+  <div class="preview-page-shell">
+    <div class="preview-nav-col"><span id="prevArrow">‹</span></div>
+
+    <div class="preview-main-center">
+      <div class="preview-large-image" id="mainPreview"></div>
+
+      <div class="preview-floating-actions">
+        <a href="project-workspace.html"><button class="round-icon-btn" title="Delete">🗑</button></a>
+        <a href="capture.html"><button class="round-icon-btn" title="Take new">📷</button></a>
+        <a href="annotation.html"><button class="round-icon-btn" title="Edit / annotate">✎</button></a>
+      </div>
+
+      <div class="preview-thumb-strip" id="thumbStrip"></div>
+    </div>
+
+    <div class="preview-nav-col"><span id="nextArrow">›</span></div>
+
+    <div class="preview-caption-bar" id="previewCaption">
+      Picture XXXXXX, taken at 22 Apr 14:03, resolution: 1920×1080
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const previewItems = [
+    { src: 'assets/sample-rebar.jpg', caption: 'Picture 001, taken at 22 Apr 14:03, resolution: 1920×1080' },
+    { src: 'assets/sample-frame-2.jpg', caption: 'Picture 002, taken at 22 Apr 14:04, resolution: 1920×1080' },
+    { src: 'assets/sample-rebar.jpg', caption: 'Picture 003, taken at 22 Apr 14:05, resolution: 1920×1080' },
+    { src: 'assets/sample-frame-2.jpg', caption: 'Picture 004, taken at 22 Apr 14:06, resolution: 1920×1080' },
+    { src: 'assets/sample-rebar.jpg', caption: 'Picture 005, taken at 22 Apr 14:07, resolution: 1920×1080' }
+  ];
+
+  let currentIndex = 0;
+
+  const mainPreview = document.getElementById('mainPreview');
+  const thumbStrip = document.getElementById('thumbStrip');
+  const previewCaption = document.getElementById('previewCaption');
+  const prevArrow = document.getElementById('prevArrow');
+  const nextArrow = document.getElementById('nextArrow');
+
+  function renderThumbs() {
+    thumbStrip.innerHTML = '';
+    previewItems.forEach((item, index) => {
+      const thumb = document.createElement('div');
+      thumb.className = 'preview-thumb' + (index === currentIndex ? ' active' : '');
+      thumb.style.backgroundImage = `url('${item.src}')`;
+      thumb.addEventListener('click', () => {
+        currentIndex = index;
+        updatePreview();
+      });
+      thumbStrip.appendChild(thumb);
+    });
+  }
+
+  function updatePreview() {
+    const item = previewItems[currentIndex];
+    mainPreview.style.backgroundImage = `url('${item.src}')`;
+    previewCaption.textContent = item.caption;
+    renderThumbs();
+  }
+
+  prevArrow.addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + previewItems.length) % previewItems.length;
+    updatePreview();
+  });
+
+  nextArrow.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % previewItems.length;
+    updatePreview();
+  });
+
+  updatePreview();
+</script>
+
+<script>
+  document.querySelectorAll('.user-menu').forEach(menu => {
+    const btn = menu.querySelector('.user-dropdown-btn');
+    const panel = menu.querySelector('.user-dropdown-panel');
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.querySelectorAll('.user-dropdown-panel').forEach(p => {
+        if (p !== panel) p.classList.remove('open');
+      });
+      panel.classList.toggle('open');
+    });
+  });
+
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.user-dropdown-panel').forEach(panel => {
+      panel.classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>

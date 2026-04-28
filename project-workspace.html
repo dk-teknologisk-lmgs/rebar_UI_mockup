@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Project Workspace — Sønderborg Multihus</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/management-pages.css">
+
+  <style>
+  /* Status-based polygon colors */
+  .location-poly.ca01 {
+    color: #1f78d1 !important;
+    border-color: #1f78d1 !important;
+    background: rgba(31, 120, 209, 0.28) !important;
+  }
+
+  .location-poly.ca02 {
+    color: #c63b3b !important;
+    border-color: #c63b3b !important;
+    background: rgba(198, 59, 59, 0.28) !important;
+  }
+
+  .location-poly.ca03 {
+    color: #2f9c51 !important;
+    border-color: #2f9c51 !important;
+    background: rgba(47, 156, 81, 0.30) !important;
+  }
+
+  .status-legend {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--color-text-muted);
+  }
+
+  .status-legend-title {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--color-text-muted);
+  }
+
+  .status-legend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .status-legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    display: inline-block;
+  }
+
+  .status-legend-dot.blue {
+    background: #1f78d1;
+  }
+
+  .status-legend-dot.red {
+    background: #c63b3b;
+  }
+
+  .status-legend-dot.green {
+    background: #2f9c51;
+  }
+</style>
+
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <header class="master-header">
+    <div class="master-logo">
+      <img src="assets/logo.png" alt="" onerror="this.style.display='none'">
+      <span class="master-logo-fallback">REBAR INSPECTION</span>
+    </div>
+
+    <div class="master-divider"></div>
+
+    <nav class="master-nav">
+      <a href="projects.html">Projects</a>
+      <span class="sep">▸</span>
+      <span class="current">Sønderborg Multihus</span>
+    </nav>
+
+<div class="master-actions">
+  <div class="user-menu">
+    <button class="user-dropdown-btn">Lylian Goes ▾</button>
+    <div class="user-dropdown-panel">
+      <a href="#" class="user-dropdown-item">Account</a>
+      <a href="login.html" class="user-dropdown-item">Log out</a>
+    </div>
+  </div>
+</div>
+  </header>
+
+  <div class="brand-strip"></div>
+
+  <div class="workspace-subbar">
+    <div>
+      <div class="workspace-subbar-title" id="subbar-title">Project workspace</div>
+      <!-- <div class="workspace-subbar-meta" id="subbar-meta">Info, locations and control points in one view</div> -->
+    </div>
+
+    <div class="workspace-subbar-right" style="position: relative;">
+      <button class="btn btn-primary" id="globalStartCaptureBtn" style="font-size: 15px;">▶ Start capture</button>
+
+      <div class="capture-target-panel" id="captureTargetPanel">
+        <div class="capture-target-title">Start capture</div>
+
+        <label>Location</label>
+        <select>
+          <option>Floor 2 — East Wall</option>
+          <option>Floor 2 — West Wall</option>
+          <option>Roof</option>
+          <option>Non-assigned</option>
+        </select>
+
+        <label>Control point</label>
+        <select>
+          <option>CA-01</option>
+          <option>CA-02</option>
+          <option>CA-03</option>
+          <option>None / Capture without assignment</option>
+        </select>
+
+        <div class="capture-target-actions">
+          <button class="btn" id="cancelCaptureTargetBtn">Cancel</button>
+          <a href="capture.html"><button class="btn btn-primary">Continue</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <div class="workspace-layout">
+
+        <aside class="workspace-sidebar">
+        <div class="tree-section-title">Sønderborg Multihus</div>
+
+        <div class="tree-level-label">Locations</div>
+
+        <ul class="tree">
+            <li>
+            <div class="tree-node tree-parent expanded active" data-view="location" data-location="east">Floor 2 — East Wall</div>
+            <ul class="tree-children">
+                <li><div class="tree-node tree-leaf" data-view="control-point" data-cp="ca01">CA-01</div></li>
+                <li><div class="tree-node tree-leaf" data-view="control-point" data-cp="ca02">CA-02</div></li>
+                <li><div class="tree-node tree-leaf" data-view="control-point" data-cp="ca03">CA-03</div></li>
+            </ul>
+            </li>
+
+            <li>
+            <div class="tree-node tree-parent" data-view="location" data-location="west">Floor 2 — West Wall</div>
+            </li>
+
+            <li>
+            <div class="tree-node tree-parent" data-view="location" data-location="roof">Roof</div>
+            </li>
+
+            <li>
+            <div class="tree-node tree-parent" data-view="location" data-location="unassigned">Non-assigned</div>
+            <ul class="tree-children">
+                <li><div class="tree-node tree-leaf" data-view="control-point" data-cp="nonassigned">Non-assigned</div></li>
+            </ul>
+            </li>
+        </ul>
+
+        <button class="btn btn-primary create-location-btn">+ Create location</button>
+        </aside>
+
+      <section class="workspace-content">
+
+        
+        <div class="workspace-view" id="view-project">
+          <div class="workspace-toolbar">
+            <div class="workspace-toolbar-left">
+              <div class="workspace-toolbar-title">Project info</div>
+            </div>
+          </div>
+
+          <div class="info-form-grid">
+            <div>
+              <label class="form-label">Name</label>
+              <input class="form-control" value="Sønderborg Multihus">
+            </div>
+
+            <div>
+              <label class="form-label">Client</label>
+              <input class="form-control" value="NCC">
+            </div>
+
+            <div>
+              <label class="form-label">Address</label>
+              <input class="form-control" value="Havnegade 12, 6400 Sønderborg">
+            </div>
+
+            <div>
+              <label class="form-label">Contact</label>
+              <input class="form-control" value="Jens Hansen · jens@ncc.dk">
+            </div>
+
+            <div class="info-full">
+              <label class="form-label">Notes</label>
+              <textarea class="form-control" rows="4">Pilot site — testing Y12/100 main reinforcement on floor 2 columns.</textarea>
+            </div>
+          </div>
+
+          <div class="workspace-divider"></div>
+
+          <div class="card-header" style="padding: 0; margin-bottom: 16px;">
+            <h2 class="section-title" style="margin: 0;">Documents</h2>
+            <button class="btn">+ Upload</button>
+          </div>
+
+          <div class="doc-list">
+            <div class="doc-row">
+              <div class="doc-name">armeringsplan_v3.pdf</div>
+              <div class="doc-meta">1.2 MB · uploaded today</div>
+              <div>˅ 🗑</div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-name">spec_NCC_2026.pdf</div>
+              <div class="doc-meta">380 KB · 2 days ago</div>
+              <div>˅ 🗑</div>
+            </div>
+            <div class="doc-row">
+              <div class="doc-name">site_photos.zip</div>
+              <div class="doc-meta">8.4 MB · last week</div>
+              <div>˅ 🗑</div>
+            </div>
+          </div>
+        </div>
+
+            
+    <div class="workspace-view active" id="view-location">
+    <div class="workspace-toolbar">
+        <div class="workspace-toolbar-left">
+        <div class="workspace-toolbar-title" id="location-title">Floor 2 — East Wall</div>
+        </div>
+        <div class="workspace-toolbar-right" id="locationToolbarActions">
+        <button class="btn workspace-action-btn">Upload / Replace drawing</button>
+        <button class="btn btn-primary workspace-action-btn">+ Create control area</button>
+        </div>
+    </div>
+
+    
+    <div id="locationWithDrawing">
+        <div class="location-view-layout">
+        <div class="location-canvas-shell" style="position: relative;">
+            <div class="location-canvas-label">Drawing</div>
+            <div class="muted-note" style="color: rgba(0, 0, 0, 0.75);">
+            Click on the drawing  to inspect control point details or start capture.
+            </div>
+
+            <div class="location-canvas">
+                <img class="location-canvas-image" src="assets/drawing-floor2-east.png" alt="Location drawing">
+            <div class="location-poly ca01" data-popup="popup-ca01">CA-01</div>
+            <div class="location-poly ca02" data-popup="popup-ca02">CA-02</div>
+            <div class="location-poly ca03" data-popup="popup-ca03">CA-03</div>
+            </div>
+            
+            <div class="polygon-popup" id="popup-ca01" style="left: 80px; top: 100px;">
+            <div class="polygon-popup-title">CA-01</div>
+            <div class="polygon-popup-sub">12 images captured</div>
+            <div class="polygon-popup-actions">
+                <button class="btn" onclick="showControlPoint('ca01')">View</button>
+                <a href="capture.html"><button class="btn btn-primary">Start capture</button></a>
+            </div>
+            </div>
+
+            <div class="polygon-popup" id="popup-ca02" style="left: 350px; top: 130px;">
+            <div class="polygon-popup-title">CA-02</div>
+            <div class="polygon-popup-sub">8 images captured</div>
+            <div class="polygon-popup-actions">
+                <button class="btn" onclick="showControlPoint('ca02')">View</button>
+                <a href="capture.html"><button class="btn btn-primary">Start capture</button></a>
+            </div>
+            </div>
+
+            <div class="polygon-popup" id="popup-ca03" style="left: 300px; top: 370px;">
+            <div class="polygon-popup-title">CA-03</div>
+            <div class="polygon-popup-sub">14 images captured</div>
+            <div class="polygon-popup-actions">
+                <button class="btn" onclick="showControlPoint('ca03')">View</button>
+                <a href="capture.html"><button class="btn btn-primary">Start capture</button></a>
+            </div>
+            
+            </div>
+            
+
+
+        </div>
+
+        <aside class="location-sidepanel">
+            <h2 class="section-title" style="margin-top: 0;">Control areas (3)</h2>
+
+        <div class="cp-list">
+        <div class="cp-card" data-target-cp="ca01">
+            <div class="cp-card-swatch" style="background:#1f78d1;"></div>
+            <div>
+            <div class="cp-card-name">CA-01</div>
+            <div class="cp-card-sub">12 files</div>
+            </div>
+        </div>
+
+        <div class="cp-card" data-target-cp="ca02">
+            <div class="cp-card-swatch" style="background:#c63b3b;"></div>
+            <div>
+            <div class="cp-card-name">CA-02</div>
+            <div class="cp-card-sub">8 files</div>
+            </div>
+        </div>
+
+        <div class="cp-card active" data-target-cp="ca03">
+            <div class="cp-card-swatch" style="background:#2f9c51;"></div>
+            <div>
+            <div class="cp-card-name">CA-03</div>
+            <div class="cp-card-sub">14 files</div>
+            </div>
+        </div>
+        <div class="cp-open-wrap">
+        <button class="btn btn-primary" style="width: 100%;" onclick="showControlPoint('ca03')">Open CA-03 ▸</button>
+        </div>
+        </div>
+
+        
+
+        <div class="status-legend">
+            <div class="status-legend-title">Colors</div>
+
+            <div class="status-legend-row">
+                <span class="status-legend-dot blue"></span>
+                <span>Created / no analysis yet</span>
+            </div>
+
+            <div class="status-legend-row">
+                <span class="status-legend-dot red"></span>
+                <span>Fail</span>
+            </div>
+
+            <div class="status-legend-row">
+                <span class="status-legend-dot green"></span>
+                <span>Pass</span>
+            </div>
+        </div>
+
+
+        </aside>
+        </div>
+    </div>
+
+    
+    <div id="locationWithoutDrawing" style="display:none;">
+        <div class="card" style="margin-bottom: 18px;">
+        <div class="card-header">
+            <h2 class="card-title">No drawing available</h2>
+        </div>
+        <div style="font-size:14px; color: var(--color-text-muted); line-height:1.5;">
+            This location is used for media captured without assigning a drawing-based location or control area.
+            All files are stored under a single default control point: <strong>Non-assigned</strong>.
+        </div>
+        </div>
+
+        <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Control points</h2>
+            <a href="capture.html"><button class="btn btn-primary">▶ Start capture</button></a>
+        </div>
+
+        <div class="cp-list">
+            <div class="cp-card active" data-target-cp="nonassigned" onclick="showControlPoint('nonassigned')">
+            <div class="cp-card-swatch" style="background:#666;"></div>
+            <div>
+                <div class="cp-card-name">Non-assigned</div>
+                <div class="cp-card-sub">23 files</div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
+        
+        <div class="workspace-view" id="view-control-point">
+          <div class="cp-content-grid">
+            <div class="cp-header-actions">
+              <div>
+                <div class="workspace-toolbar-title" id="cp-title">CA-03</div>
+                <div class="cp-header-meta">Control point · Floor 2 — East Wall · 14 media files</div>
+              </div>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <button class="btn">Edit area</button>
+                <button class="btn">Delete</button>
+                <a href="capture.html"><button class="btn btn-primary">▶ Start capture</button></a>
+              </div>
+            </div>
+
+        <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Requirements</h2>
+            <button class="btn" style="font-size: 14px;">+ Add</button>
+        </div>
+
+        <div class="requirements-grid">
+            <div class="req-display">
+            <div class="req-type-label">Main reinforcement</div>
+            <dl class="req-grid">
+                <dt>Horizontal:</dt><dd>ø12 / 100 mm (±1 / ±10)</dd>
+                <dt>Vertical:</dt><dd>ø10 / 150 mm (±1 / ±15)</dd>
+            </dl>
+            </div>
+
+            <div class="req-display">
+            <div class="req-type-label">Stirrups</div>
+            <dl class="req-grid">
+                <dt>All sides:</dt><dd>ø16 / 150 mm (±1 / ±10)</dd>
+            </dl>
+            </div>
+
+            <div class="req-display">
+            <div class="req-type-label">Cover thickness</div>
+            <dl class="req-grid">
+                <dt>Cover:</dt><dd>25 mm (±5)</dd>
+            </dl>
+            </div>
+        </div>
+        </div>
+
+            <div class="card">
+              <div class="card-header" style="align-items: flex-end;">
+                <h2 class="card-title">Media</h2>
+                <div class="toolbar-row" style="margin: 0;">
+                  <span>Date:
+                    <strong>
+                      <select style="border:none; background:transparent; font-weight:600;">
+                        <option>All dates</option>
+                        <option>22 Apr 2026</option>
+                        <option>21 Apr 2026</option>
+                      </select>
+                    </strong>
+                  </span>
+                  <span>Type:
+                    <strong>
+                      <select style="border:none; background:transparent; font-weight:600;">
+                        <option>All</option>
+                        <option>Photos</option>
+                        <option>Recording frames</option>
+                      </select>
+                    </strong>
+                  </span>
+                  <span>Sort:
+                    <strong>
+                      <select style="border:none; background:transparent; font-weight:600;">
+                        <option>Newest</option>
+                        <option>Oldest</option>
+                      </select>
+                    </strong>
+                  </span>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 30px;">
+                <h3 style="margin: 0 0 14px; font-size: 18px; color: var(--color-text);">22 Apr 2026</h3>
+
+                <div style="font-size:14px; font-weight:700; margin-bottom:10px; color: var(--color-text-muted);">Photos</div>
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-bottom: 22px;">
+                  <a href="preview-gallery-item.html" class="media-thumb-wrap">
+                    <div style="height:120px; border:1px solid var(--color-border); background:#ddd url('assets/sample-rebar.jpg') center/cover no-repeat;"></div>
+                    <span class="media-status-tag pass">Pass</span>
+                  </a>
+                  <a href="preview-gallery-item.html" class="media-thumb-wrap">
+                    <div style="height:120px; border:1px solid var(--color-border); background:#ddd url('assets/sample-frame-2.jpg') center/cover no-repeat;"></div>
+                    <span class="media-status-tag fail">Fail</span>
+                  </a>
+                  <a href="preview-gallery-item.html" class="media-thumb-wrap">
+                    <div style="height:120px; border:1px solid var(--color-border); background:#ddd url('assets/sample-rebar.jpg') center/cover no-repeat;"></div>
+                    <span class="media-status-tag pending">Not started</span>
+                  </a>
+                  <a href="preview-gallery-item.html" class="media-thumb-wrap">
+                    <div style="height:120px; border:1px solid var(--color-border); background:#ddd url('assets/sample-frame-2.jpg') center/cover no-repeat;"></div>
+                    <span class="media-status-tag pass">Pass</span>
+                  </a>
+                </div>
+
+                <div style="font-size:14px; font-weight:700; margin-bottom:10px; color: var(--color-text-muted);">Recording frames</div>
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px;">
+                  <a href="preview-gallery-item.html" class="media-thumb-wrap">
+                    <div style="height:120px; border:1px solid var(--color-border); background:#ddd url('assets/sample-rebar.jpg') center/cover no-repeat;"></div>
+                    <span class="media-status-tag pending">Not started</span>
+                  </a>
+                  <a href="preview-gallery-item.html" class="media-thumb-wrap">
+                    <div style="height:120px; border:1px solid var(--color-border); background:#ddd url('assets/sample-frame-2.jpg') center/cover no-repeat;"></div>
+                    <span class="media-status-tag fail">Fail</span>
+                  </a>
+                </div>
+              </div>
+
+              <div>
+                <h3 style="margin: 0 0 14px; font-size: 18px; color: var(--color-text);">21 Apr 2026</h3>
+
+                <div style="font-size:14px; font-weight:700; margin-bottom:10px; color: var(--color-text-muted);">Photos</div>
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-bottom: 22px;">
+                  <a href="preview-gallery-item.html" class="media-thumb-wrap">
+                    <div style="height:120px; border:1px solid var(--color-border); background:#ddd url('assets/sample-rebar.jpg') center/cover no-repeat;"></div>
+                    <span class="media-status-tag pass">Pass</span>
+                  </a>
+                  <a href="preview-gallery-item.html" class="media-thumb-wrap">
+                    <div style="height:120px; border:1px solid var(--color-border); background:#ddd url('assets/sample-frame-2.jpg') center/cover no-repeat;"></div>
+                    <span class="media-status-tag pending">Not started</span>
+                  </a>
+                  <a href="preview-gallery-item.html" class="media-thumb-wrap">
+                    <div style="height:120px; border:1px solid var(--color-border); background:#ddd url('assets/sample-rebar.jpg') center/cover no-repeat;"></div>
+                    <span class="media-status-tag fail">Fail</span>
+                  </a>
+                </div>
+
+                <div style="font-size:14px; font-weight:700; margin-bottom:10px; color: var(--color-text-muted);">Recording frames</div>
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px;">
+                  <a href="preview-gallery-item.html" class="media-thumb-wrap">
+                    <div style="height:120px; border:1px solid var(--color-border); background:#ddd url('assets/sample-frame-2.jpg') center/cover no-repeat;"></div>
+                    <span class="media-status-tag pass">Pass</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+  const subbarTitle = document.getElementById('subbar-title');
+  const subbarMeta = document.getElementById('subbar-meta');
+  const viewProject = document.getElementById('view-project');
+  const viewLocation = document.getElementById('view-location');
+  const viewControlPoint = document.getElementById('view-control-point');
+
+  const globalStartCaptureBtn = document.getElementById('globalStartCaptureBtn');
+  const captureTargetPanel = document.getElementById('captureTargetPanel');
+  const cancelCaptureTargetBtn = document.getElementById('cancelCaptureTargetBtn');
+
+  const locationWithDrawing = document.getElementById('locationWithDrawing');
+  const locationWithoutDrawing = document.getElementById('locationWithoutDrawing');
+  const locationToolbarActions = document.getElementById('locationToolbarActions');
+
+  function clearViews() {
+    document.querySelectorAll('.workspace-view').forEach(v => v.classList.remove('active'));
+  }
+
+  function clearTreeSelection() {
+    document.querySelectorAll('.tree-node').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.cp-card').forEach(n => n.classList.remove('active'));
+  }
+
+  function closePolygonPopups() {
+    document.querySelectorAll('.polygon-popup').forEach(p => p.classList.remove('open'));
+  }
+
+  function showProject() {
+    clearViews();
+    viewProject.classList.add('active');
+    subbarTitle.textContent = 'Project workspace';
+    subbarMeta.textContent = 'Project info and documents';
+    clearTreeSelection();
+    closePolygonPopups();
+  }
+
+  function showLocation(locationKey = 'east', clickedNode = null) {
+    clearViews();
+    viewLocation.classList.add('active');
+    clearTreeSelection();
+    closePolygonPopups();
+
+    if (clickedNode) clickedNode.classList.add('active');
+
+    if (locationKey === 'east') {
+      document.getElementById('location-title').textContent = 'Floor 2 — East Wall';
+      subbarTitle.textContent = 'Sønderborg Multihus · Floor 2 — East Wall';
+      subbarMeta.textContent = 'Drawing and control areas';
+      locationWithDrawing.style.display = 'block';
+      locationWithoutDrawing.style.display = 'none';
+      locationToolbarActions.style.display = 'flex';
+    } else if (locationKey === 'west') {
+      document.getElementById('location-title').textContent = 'Floor 2 — West Wall';
+      subbarTitle.textContent = 'Sønderborg Multihus · Floor 2 — West Wall';
+      subbarMeta.textContent = 'Drawing and control areas';
+      locationWithDrawing.style.display = 'block';
+      locationWithoutDrawing.style.display = 'none';
+      locationToolbarActions.style.display = 'flex';
+    } else if (locationKey === 'unassigned') {
+      document.getElementById('location-title').textContent = 'Non-assigned';
+      subbarTitle.textContent = 'Sønderborg Multihus · Non-assigned';
+      subbarMeta.textContent = 'Media captured without assigned location or control point';
+      locationWithDrawing.style.display = 'none';
+      locationWithoutDrawing.style.display = 'block';
+      locationToolbarActions.style.display = 'none';
+    } else {
+      document.getElementById('location-title').textContent = 'Roof';
+      subbarTitle.textContent = 'Sønderborg Multihus · Roof';
+      subbarMeta.textContent = 'Drawing and control areas';
+      locationWithDrawing.style.display = 'block';
+      locationWithoutDrawing.style.display = 'none';
+      locationToolbarActions.style.display = 'flex';
+    }
+  }
+
+  function showControlPoint(cpKey = 'ca03', clickedNode = null) {
+    clearViews();
+    viewControlPoint.classList.add('active');
+    clearTreeSelection();
+    closePolygonPopups();
+
+    if (clickedNode) clickedNode.classList.add('active');
+
+    document.querySelectorAll('.cp-card').forEach(card => {
+      if (card.dataset.targetCp === cpKey) card.classList.add('active');
+    });
+
+    const cpTitle = document.getElementById('cp-title');
+    if (cpKey === 'ca01') {
+      cpTitle.textContent = 'CA-01';
+      subbarTitle.textContent = 'Sønderborg Multihus · Floor 2 — East Wall · CA-01';
+      subbarMeta.textContent = 'Requirements and media';
+    } else if (cpKey === 'ca02') {
+      cpTitle.textContent = 'CA-02';
+      subbarTitle.textContent = 'Sønderborg Multihus · Floor 2 — East Wall · CA-02';
+      subbarMeta.textContent = 'Requirements and media';
+    } else if (cpKey === 'nonassigned') {
+      cpTitle.textContent = 'Non-assigned';
+      subbarTitle.textContent = 'Sønderborg Multihus · Non-assigned · Non-assigned';
+      subbarMeta.textContent = 'Requirements and media';
+    } else {
+      cpTitle.textContent = 'CA-03';
+      subbarTitle.textContent = 'Sønderborg Multihus · Floor 2 — East Wall · CA-03';
+      subbarMeta.textContent = 'Requirements and media';
+    }
+  }
+
+  document.querySelectorAll('.tree-node').forEach(node => {
+    node.addEventListener('click', () => {
+      const view = node.dataset.view;
+      if (view === 'project') showProject();
+      if (view === 'location') showLocation(node.dataset.location, node);
+      if (view === 'control-point') showControlPoint(node.dataset.cp, node);
+    });
+  });
+
+  document.querySelectorAll('.location-poly').forEach(poly => {
+    poly.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closePolygonPopups();
+      const popup = document.getElementById(poly.dataset.popup);
+      if (popup) popup.classList.add('open');
+    });
+  });
+
+  document.querySelectorAll('.cp-card').forEach(card => {
+    card.addEventListener('click', () => showControlPoint(card.dataset.targetCp));
+  });
+
+  document.querySelector('.tree-section-title').addEventListener('click', showProject);
+
+  globalStartCaptureBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    captureTargetPanel.classList.toggle('open');
+  });
+
+  cancelCaptureTargetBtn.addEventListener('click', () => {
+    captureTargetPanel.classList.remove('open');
+  });
+
+  document.addEventListener('click', () => {
+    closePolygonPopups();
+    captureTargetPanel.classList.remove('open');
+  });
+
+  captureTargetPanel.addEventListener('click', (e) => e.stopPropagation());
+</script>
+
+<script>
+  document.querySelectorAll('.user-menu').forEach(menu => {
+    const btn = menu.querySelector('.user-dropdown-btn');
+    const panel = menu.querySelector('.user-dropdown-panel');
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.querySelectorAll('.user-dropdown-panel').forEach(p => {
+        if (p !== panel) p.classList.remove('open');
+      });
+      panel.classList.toggle('open');
+    });
+  });
+
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.user-dropdown-panel').forEach(panel => {
+      panel.classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>

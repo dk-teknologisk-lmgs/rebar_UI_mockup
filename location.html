@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Location — Floor 2 East Wall</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/management-pages.css">
+</head>
+<body>
+
+<div class="page-wrap">
+  <header class="master-header">
+    <div class="master-logo">
+      <img src="assets/logo.png" alt="" onerror="this.style.display='none'">
+      <span class="master-logo-fallback">REBAR INSPECTION</span>
+    </div>
+
+    <div class="master-divider"></div>
+
+    <nav class="master-nav">
+      <a href="projects.html">Projects</a>
+      <span class="sep">▸</span>
+      <a href="project.html">Sønderborg Multihus</a>
+      <span class="sep">▸</span>
+      <span class="current">Floor 2 — East Wall</span>
+    </nav>
+<div class="master-actions">
+  <div class="user-menu">
+    <button class="user-dropdown-btn">Lylian Goes ▾</button>
+    <div class="user-dropdown-panel">
+      <a href="#" class="user-dropdown-item">Account</a>
+      <a href="login.html" class="user-dropdown-item">Log out</a>
+    </div>
+  </div>
+</div>
+  </header>
+
+  <div class="brand-strip"></div>
+
+  <div class="white-toolbar">
+    <div class="title">Sønderborg Multihus · Floor 2 — East Wall</div>
+    <button class="btn">Replace drawing</button>
+    <button class="btn btn-primary">+ New control area</button>
+    <span class="muted-note">Can create control area even if there is no drawing uploaded</span>
+  </div>
+
+  <div class="page-content">
+    <div class="location-detail-layout">
+
+      <aside class="left-rail">
+        <div class="tree-section-title">Sønderborg<br>Multihus</div>
+
+        <ul class="tree">
+          <li>
+            <div class="tree-node tree-parent expanded active">Floor 2 — East Wall</div>
+            <ul class="tree-children">
+              <li><div class="tree-node tree-leaf">CA-01</div></li>
+              <li><div class="tree-node tree-leaf">CA-02</div></li>
+              <li><div class="tree-node tree-leaf active">★ CA-03</div></li>
+            </ul>
+          </li>
+          <li><div class="tree-node tree-parent">Floor 2 — West Wall</div></li>
+          <li><div class="tree-node tree-parent">Roof</div></li>
+        </ul>
+      </aside>
+
+      <section class="drawing-panel">
+        <div class="drawing-label">Drawing canvas</div>
+
+        <div class="drawing-canvas">
+          <div class="canvas-poly ca01">CA-01</div>
+          <div class="canvas-poly ca02">CA-02</div>
+          <div class="canvas-poly ca03">CA-03 ★</div>
+        </div>
+
+        <div class="muted-note" style="color: rgba(255,255,255,0.75);">
+          Polygons stored in normalized 0–1 coordinates so they survive a drawing replacement.
+          Click a polygon or list row → opens area detail.
+        </div>
+      </section>
+
+      <aside class="location-side-list">
+        <h2 class="section-title" style="margin-top: 0;">Control areas (3)</h2>
+
+        <div class="control-point-list">
+          <div class="cp-item">
+            <div class="cp-swatch" style="background:#2c8a8a;"></div>
+            <div>
+              <div class="cp-name">CA-01</div>
+              <div class="cp-sub">12 sessions</div>
+            </div>
+          </div>
+
+          <div class="cp-item">
+            <div class="cp-swatch" style="background:#8144a8;"></div>
+            <div>
+              <div class="cp-name">CA-02</div>
+              <div class="cp-sub">8 sessions</div>
+            </div>
+          </div>
+
+          <div class="cp-item active">
+            <div class="cp-swatch" style="background:#ff8c00;"></div>
+            <div>
+              <div class="cp-name">CA-03</div>
+              <div class="cp-sub">4 sessions</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="open-active-wrap">
+          <a href="control-point.html">
+            <button class="btn btn-primary" style="width: 100%;">Open ★ CA-03 ▸</button>
+          </a>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

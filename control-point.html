@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Control Point — CA-03</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+</head>
+<body>
+
+<div class="app-shell">
+
+  
+  
+  
+  <header class="master-header">
+    <div class="master-logo">
+      <img src="assets/logo.png" alt="" onerror="this.style.display='none'">
+      <span class="master-logo-fallback">REBAR INSPECTION</span>
+    </div>
+
+    <div class="master-divider"></div>
+
+    <nav class="master-nav">
+      <a href="projects.html">Projects</a>
+      <span class="sep">▸</span>
+      <a href="project.html">Sønderborg Multihus</a>
+      <span class="sep">▸</span>
+      <a href="location.html">Floor 2 — East Wall</a>
+      <span class="sep">▸</span>
+      <span class="current">★ CA-03</span>
+    </nav>
+
+<div class="master-actions">
+  <div class="user-menu">
+    <button class="user-dropdown-btn">Lylian Goes ▾</button>
+    <div class="user-dropdown-panel">
+      <a href="#" class="user-dropdown-item">Account</a>
+      <a href="login.html" class="user-dropdown-item">Log out</a>
+    </div>
+  </div>
+</div>
+  </header>
+
+  
+  
+  
+  <div class="brand-strip"></div>
+
+  <header class="app-topbar">
+    <div class="breadcrumb">
+      <span class="current">CA-03</span>
+      <span style="color: rgba(255,255,255,0.6); font-size: var(--fs-sm); margin-left: var(--space-3);">
+        Control point · 4 capture sessions
+      </span>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn">Edit area</button>
+      <button class="btn">Delete</button>
+      <a class="btn btn-primary" href="capture.html">▶ Start capture</a>
+    </div>
+  </header>
+
+  
+  
+  
+  <main class="app-main">
+
+    <aside class="app-sidebar">
+      <div class="tree-section-title">Sønderborg<br>Multihus</div>
+      <ul class="tree">
+        <li>
+          <div class="tree-node tree-parent expanded active">Floor 2 — East Wall</div>
+          <ul class="tree-children">
+            <li><div class="tree-node tree-leaf">CA-01</div></li>
+            <li><div class="tree-node tree-leaf">CA-02</div></li>
+            <li><div class="tree-node tree-leaf active">★ CA-03</div></li>
+          </ul>
+        </li>
+        <li><div class="tree-node tree-parent">Floor 2 — West Wall</div></li>
+        <li><div class="tree-node tree-parent">Roof</div></li>
+      </ul>
+    </aside>
+
+    <section class="app-content">
+      <div class="content-stack">
+
+        
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Requirements</h2>
+            <button class="btn">+ Add</button>
+          </div>
+          <div class="req-display" id="req-display"></div>
+        </div>
+
+        
+        <div class="card">
+          <div class="card-header">
+            <h2 class="card-title">Capture sessions (4)</h2>
+            <div class="toolbar-row" style="margin: 0;">
+              <span>Filter: <strong>All</strong> ▾</span>
+              <span>Sort: <strong>Newest</strong> ▾</span>
+            </div>
+          </div>
+          <div class="session-grid" id="session-grid"></div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+</div>
+
+<script src="js/mock-data.js"></script>
+<script>
+  const cp = MOCK_DATA.projects[0].locations[0].controlPoints.find(c => c.id === 'cp_ca03');
+
+  const reqContainer = document.getElementById('req-display');
+  if (cp.requirements.length === 0) {
+    reqContainer.innerHTML = '<em style="color: var(--color-text-muted);">No requirements defined yet. Click "+ Add" to define one.</em>';
+  } else {
+    cp.requirements.forEach(req => {
+      const f = formatRequirement(req);
+      if (!f) return;
+      const dl = f.rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+      reqContainer.insertAdjacentHTML('beforeend', `
+        <div class="req-type-label">${f.typeLabel}</div>
+        <dl class="req-grid">${dl}</dl>
+      `);
+    });
+  }
+
+  const grid = document.getElementById('session-grid');
+  cp.sessions.forEach(s => {
+    const badgeHtml = s.status === 'pass' ? '<span class="badge pass">✓ Pass</span>'
+                    : s.status === 'fail' ? '<span class="badge fail">✗ Fail</span>'
+                    : '<span class="badge pending">Pending</span>';
+
+    grid.insertAdjacentHTML('beforeend', `
+      <a class="session-card" href="annotation.html">
+        <div class="session-thumb">
+          ${s.annotated ? '<span class="session-tag">annotated</span>' : ''}
+        </div>
+        <div class="session-body">
+          <div class="session-name">${s.name}</div>
+          <div class="session-meta">${s.date} · ${s.images} img · ${s.recordings} rec</div>
+          <div class="session-footer">
+            ${badgeHtml}
+            <span class="session-open">Open ▸</span>
+          </div>
+        </div>
+      </a>
+    `);
+  });
+</script>
+
+</body>
+</html>

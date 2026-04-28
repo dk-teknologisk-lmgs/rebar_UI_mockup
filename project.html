@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Project — Sønderborg Multihus</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/management-pages.css">
+</head>
+<body>
+
+<div class="page-wrap">
+  <header class="master-header">
+    <div class="master-logo">
+      <img src="assets/logo.png" alt="" onerror="this.style.display='none'">
+      <span class="master-logo-fallback">REBAR INSPECTION</span>
+    </div>
+
+    <div class="master-divider"></div>
+
+    <nav class="master-nav">
+      <a href="projects.html">Projects</a>
+      <span class="sep">▸</span>
+      <span class="current">Sønderborg Multihus</span>
+    </nav>
+
+<div class="master-actions">
+  <div class="user-menu">
+    <button class="user-dropdown-btn">Lylian Goes ▾</button>
+    <div class="user-dropdown-panel">
+      <a href="#" class="user-dropdown-item">Account</a>
+      <a href="login.html" class="user-dropdown-item">Log out</a>
+    </div>
+  </div>
+</div>
+  </header>
+
+  <div class="brand-strip"></div>
+
+  <div class="page-content">
+    <div class="tabs-row">
+      <a href="projects.html"><button class="tab">‹ Projects</button></a>
+      <button class="tab active">Info & docs</button>
+      <a href="location.html"><button class="tab">Locations</button></a>
+    </div>
+
+    <div class="admin-layout">
+      <aside class="left-rail">
+        <div class="tree-section-title">Sønderborg<br>Multihus</div>
+
+        <ul class="tree">
+          <li>
+            <div class="tree-node tree-parent expanded active">Floor 2 — East Wall</div>
+            <ul class="tree-children">
+              <li><div class="tree-node tree-leaf">CA-01</div></li>
+              <li><div class="tree-node tree-leaf">CA-02</div></li>
+              <li><div class="tree-node tree-leaf">CA-03 (4 sessions)</div></li>
+            </ul>
+          </li>
+          <li><div class="tree-node tree-parent">Floor 2 — West Wall</div></li>
+          <li><div class="tree-node tree-parent">Roof</div></li>
+        </ul>
+
+        <div style="margin-top: 20px;">
+          <button class="btn" style="width: 100%;">+ Add location</button>
+        </div>
+      </aside>
+
+      <section class="main-panel">
+        <h2 class="section-title">Project info</h2>
+
+        <div class="info-form-grid">
+          <div>
+            <label class="form-label">Name</label>
+            <input class="form-control" value="Sønderborg Multihus">
+          </div>
+
+          <div>
+            <label class="form-label">Client</label>
+            <input class="form-control" value="NCC">
+          </div>
+
+          <div>
+            <label class="form-label">Address</label>
+            <input class="form-control" value="Havnegade 12, 6400 Sønderborg">
+          </div>
+
+          <div>
+            <label class="form-label">Contact</label>
+            <input class="form-control" value="Jens Hansen · jens@ncc.dk">
+          </div>
+
+          <div class="info-full">
+            <label class="form-label">Notes</label>
+            <textarea class="form-control" rows="4">Pilot site — testing Y12/100 main reinforcement on floor 2 columns.</textarea>
+          </div>
+        </div>
+
+        <div class="card-header" style="padding: 0; margin-bottom: 16px;">
+          <h2 class="section-title" style="margin: 0;">Documents</h2>
+          <button class="btn">+ Upload</button>
+        </div>
+
+        <div class="doc-list">
+          <div class="doc-row">
+            <div class="doc-name">armeringsplan_v3.pdf</div>
+            <div class="doc-meta">1.2 MB · uploaded today</div>
+            <div>˅ 🗑</div>
+          </div>
+
+          <div class="doc-row">
+            <div class="doc-name">spec_NCC_2026.pdf</div>
+            <div class="doc-meta">380 KB · 2 days ago</div>
+            <div>˅ 🗑</div>
+          </div>
+
+          <div class="doc-row">
+            <div class="doc-name">site_photos.zip</div>
+            <div class="doc-meta">8.4 MB · last week</div>
+            <div>˅ 🗑</div>
+          </div>
+        </div>
+
+        <div class="page-footnote" style="padding-left: 0; padding-right: 0;">
+          Documents are a placeholder for now (upload + list only). The persistent left sidebar tree mirrors the structure stored in project.json.
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

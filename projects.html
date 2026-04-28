@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>All projects</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/management-pages.css">
+</head>
+<body>
+
+<div class="page-wrap">
+  <header class="master-header">
+    <div class="master-logo">
+      <img src="assets/logo.png" alt="" onerror="this.style.display='none'">
+      <span class="master-logo-fallback">REBAR INSPECTION</span>
+    </div>
+
+    <div class="master-divider"></div>
+
+    <nav class="master-nav">
+      <span class="current">All projects</span>
+    </nav>
+
+ <div class="master-actions">
+  <div class="user-menu">
+    <button class="user-dropdown-btn">Lylian Goes ▾</button>
+    <div class="user-dropdown-panel">
+      <a href="#" class="user-dropdown-item">Account</a>
+      <a href="login.html" class="user-dropdown-item">Log out</a>
+    </div>
+  </div>
+</div>
+  </header>
+
+  <div class="brand-strip"></div>
+
+  <div class="white-toolbar">
+    <div class="title">All projects</div>
+    <button class="btn">🔍 Search</button>
+    <button class="btn">Sort: Recent ▾</button>
+    <button class="btn btn-primary">+ New project</button>
+  </div>
+
+  <div class="page-content">
+    <div class="projects-grid">
+
+    <a class="project-card" href="project-workspace.html">
+        <h2 class="project-card-title">Sønderborg Multihus</h2>
+        <div class="project-card-meta">NCC</div>
+        <div class="project-card-sub">3 loc · 47 sessions</div>
+        <div class="badge pending">4 in-progress</div>
+        <div class="project-card-updated">Updated today</div>
+      </a>
+
+      <div class="project-card">
+        <h2 class="project-card-title">Aarhus Letbane</h2>
+        <div class="project-card-meta">MTH</div>
+        <div class="project-card-sub">1 loc · 8 sessions</div>
+        <div class="project-card-updated">Updated 3d ago</div>
+      </div>
+
+      <div class="project-card">
+        <h2 class="project-card-title">Køge Havn Etape 1</h2>
+        <div class="project-card-meta">Per Aarsleff</div>
+        <div class="project-card-sub">5 loc · 92 sessions</div>
+        <div class="project-card-updated">Updated 1w ago</div>
+      </div>
+
+      <div class="project-card">
+        <h2 class="project-card-title">Esbjerg Brovej</h2>
+        <div class="project-card-meta">COWI</div>
+        <div class="project-card-sub">2 loc · 14 sessions</div>
+        <div class="project-card-updated">Updated 2w ago</div>
+      </div>
+
+      <div class="project-card">
+        <h2 class="project-card-title">Roskilde Stadion</h2>
+        <div class="project-card-meta">NCC</div>
+        <div class="project-card-sub">4 loc · 33 sessions</div>
+        <div class="project-card-updated">Updated 3w ago</div>
+      </div>
+
+      <div class="project-card">
+        <h2 class="project-card-title">Fredericia Tank A</h2>
+        <div class="project-card-meta">TOTAL</div>
+        <div class="project-card-sub">1 loc · 6 sessions</div>
+        <div class="project-card-updated">Updated 1mo ago</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-footnote">
+    Cards are read from data/app/projects_index.json (lightweight cache). Soft-delete is preserved for audit; deleted projects are simply hidden.
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.user-menu').forEach(menu => {
+    const btn = menu.querySelector('.user-dropdown-btn');
+    const panel = menu.querySelector('.user-dropdown-panel');
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.querySelectorAll('.user-dropdown-panel').forEach(p => {
+        if (p !== panel) p.classList.remove('open');
+      });
+      panel.classList.toggle('open');
+    });
+  });
+
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.user-dropdown-panel').forEach(panel => {
+      panel.classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>

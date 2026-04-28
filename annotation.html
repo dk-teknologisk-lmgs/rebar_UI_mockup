@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Annotation — Beam B-12</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/capture-annotation.css">
+  <style>
+    .annotation-topbar-center {
+      color: rgba(255,255,255,0.88);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .annotation-topbar-center strong {
+      color: white;
+      font-weight: 700;
+    }
+
+    .annotation-bottom-toolbar {
+      background: white;
+      border-top: 1px solid var(--color-border);
+      display: grid;
+      grid-template-columns: 290px 1fr 220px;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      position: relative;
+    }
+
+    /* ========================================= */
+    /* Requirement selector                      */
+    /* ========================================= */
+    .requirement-selector {
+      position: relative;
+      min-width: 240px;
+    }
+
+    .requirement-chip {
+      display: flex;
+      align-items: stretch;
+      min-height: 52px;
+      border: 1px solid var(--color-border);
+      background: white;
+      cursor: pointer;
+    }
+
+    .requirement-chip-main {
+      flex: 1;
+      padding: 10px 12px;
+      color: var(--color-primary);
+      font-weight: 700;
+      line-height: 1.25;
+      font-size: 12px;
+    }
+
+    .requirement-chip-select {
+      width: 30px;
+      background: var(--color-primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .requirement-menu {
+      position: absolute;
+      left: 0;
+      bottom: calc(100% + 8px);
+      min-width: 300px;
+      background: white;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-medium);
+      border-radius: 6px;
+      overflow: hidden;
+      display: none;
+      z-index: 30;
+    }
+
+    .requirement-menu.open {
+      display: block;
+    }
+
+    .requirement-option {
+      padding: 10px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--color-border-soft);
+    }
+
+    .requirement-option:last-child {
+      border-bottom: none;
+    }
+
+    .requirement-option:hover {
+      background: var(--color-surface-soft);
+    }
+
+    /* ========================================= */
+    /* Tool buttons                              */
+    /* ========================================= */
+    .annotation-tools {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      position: relative;
+    }
+
+    .annotation-tool-wrap {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .tool-btn {
+      min-width: 78px;
+      min-height: 68px;
+      border: 1px solid var(--color-border);
+      background: white;
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 6px 8px;
+    }
+
+    .tool-btn:hover {
+      background: var(--color-surface-soft);
+    }
+
+    .tool-icon {
+      font-size: 18px;
+      line-height: 1;
+      color: var(--color-primary);
+    }
+
+    .tool-label {
+      font-size: 12px;
+      color: var(--color-text);
+      line-height: 1.1;
+      padding-top: 3px;
+    }
+
+    .tool-icon-img {
+  width: 20px;
+  height: 20px;
+  display: block;
+  object-fit: contain;
+}
+
+    .tool-submenu {
+      position: absolute;
+      bottom: calc(100% + 8px);
+      display: none;
+      flex-direction: row;
+      gap: 6px;
+      background: white;
+      border: 1px solid var(--color-border);
+      box-shadow: var(--shadow-soft);
+      border-radius: 6px;
+      padding: 6px;
+      z-index: 25;
+      white-space: nowrap;
+    }
+
+    .tool-submenu.open {
+      display: flex;
+    }
+
+    .tool-submenu .btn {
+      min-width: 90px;
+      padding: 6px 10px;
+    }
+
+    /* ========================================= */
+    /* Settings panel                            */
+    /* ========================================= */
+    .settings-panel {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: calc(100% + 12px);
+      width: 760px;
+      max-width: calc(100vw - 80px);
+      background: white;
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      box-shadow: var(--shadow-medium);
+      padding: 18px;
+      display: none;
+      z-index: 35;
+    }
+
+    .settings-panel.open {
+      display: block;
+    }
+
+    .settings-title {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 14px;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .settings-block {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .settings-block-title {
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      font-weight: 700;
+    }
+
+    .settings-checkbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .settings-checkbox-list label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--color-text);
+    }
+
+    .settings-slider-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .settings-slider-row input[type="range"] {
+      flex: 1;
+    }
+
+    .color-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .color-chip {
+      width: 28px;
+      height: 20px;
+      border-radius: 4px;
+      border: 1px solid var(--color-border);
+    }
+
+    /* ========================================= */
+    /* Counter                                   */
+    /* ========================================= */
+    .annotation-stats {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .annotation-counter-box {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--color-surface-soft);
+      border: 1px solid var(--color-border);
+      border-radius: 6px;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+    }
+
+    .annotation-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+
+    .annotation-dot.green { background: #3ecb52; }
+    .annotation-dot.red { background: #e74c3c; }
+    .annotation-dot.gray { background: #999; }
+
+    .annotation-counter-divider {
+      width: 1px;
+      height: 18px;
+      background: var(--color-border);
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-shell annotation-shell">
+
+  <header class="master-header">
+    <div class="master-logo">
+      <img src="assets/logo.png" alt="" onerror="this.style.display='none'">
+      <span class="master-logo-fallback">REBAR INSPECTION</span>
+    </div>
+
+    <div class="master-divider"></div>
+
+    <nav class="master-nav">
+      <a href="projects.html">Projects</a>
+      <span class="sep">▸</span>
+      <a href="project-workspace.html">Sønderborg Multihus</a>
+      <span class="sep">▸</span>
+      <a href="project-workspace.html">Floor 2 — East Wall</a>
+      <span class="sep">▸</span>
+      <a href="project-workspace.html">CA-03</a>
+      <span class="sep">▸</span>
+      <span class="current">Beam B-12 — Image 001</span>
+    </nav>
+
+<div class="master-actions">
+  <div class="user-menu">
+    <button class="user-dropdown-btn">Lylian Goes ▾</button>
+    <div class="user-dropdown-panel">
+      <a href="#" class="user-dropdown-item">Account</a>
+      <a href="login.html" class="user-dropdown-item">Log out</a>
+    </div>
+  </div>
+</div>
+  </header>
+
+  <div class="brand-strip"></div>
+
+  <header class="app-topbar">
+    <div class="breadcrumb">
+      <a class="topbar-back" href="project-workspace.html" style="margin-right: 8px; padding-left: 15px; padding-right: 15px;">‹ Back</a>
+      <span class="current">Annotation workspace</span>
+    </div>
+
+    <div class="annotation-topbar-center">
+      <strong>Image 001</strong> · 22 Apr 2026 14:03 · Annotation <strong>v3</strong>
+    </div>
+
+    <div class="topbar-actions">
+      <a class="btn" href="project-workspace.html">Discard</a>
+      <button class="btn btn-primary" id="saveAnnotationBtn">✓ Save</button>
+    </div>
+  </header>
+
+  <div class="annotation-stage">
+    <div class="annotation-canvas-wrap">
+      <div class="annotation-canvas"></div>
+
+
+      <div class="view-toggle">
+        <button class="active" id="annRgbBtn">RGB</button>
+        <button id="annRgbdBtn">RGB-D</button>
+      </div>
+    </div>
+
+    <div class="annotation-bottom-toolbar">
+      
+      <div class="requirement-selector">
+        <div class="requirement-menu" id="requirementMenu">
+          <div class="requirement-option" data-label="Main reinforcement Y12/100&#10; Cover: 50 mm">
+            Main reinforcement Y12/100
+          </div>
+          <div class="requirement-option" data-label="Stirrups Y16/150&#10; Cover: 50 mm">
+            Stirrups Y16/150
+          </div>
+          <div class="requirement-option" data-label="None&#10;Free measure">
+            None (free measure)
+          </div>
+        </div>
+
+        <div class="requirement-chip" id="requirementChip">
+            <div class="requirement-chip-main" id="requirementChipText">
+                Main reinforcement Y12/100<br>
+                Cover: 50 mm
+            </div>
+            <div class="requirement-chip-select">▼</div>
+        </div>
+        <label style="font-size: 10px";>Choose requirement before detection/measurement</label>
+      </div>
+
+      
+      <div class="annotation-tools">
+        <button class="tool-btn">
+        <img class="tool-icon-img" src="assets/icons/detect.svg" alt="">
+          <span class="tool-label">Detect</span>
+        </button>
+
+        <button class="tool-btn">
+          <img class="tool-icon-img" src="assets/icons/measure.svg" alt="">
+          <span class="tool-label">Measure</span>
+        </button>
+
+        <div class="annotation-tool-wrap">
+          <button class="tool-btn" id="autoBtn">
+            <img class="tool-icon-img" src="assets/icons/auto.svg" alt="">
+            <span class="tool-label">Auto</span>
+          </button>
+          <div class="tool-submenu" id="autoSubmenu">
+            <button class="btn">Area</button>
+            <button class="btn">Full</button>
+          </div>
+        </div>
+
+        <button class="tool-btn">
+          <img class="tool-icon-img" src="assets/icons/layers.svg" alt="">
+          <span class="tool-label">Cover</span>
+        </button>
+
+        <button class="tool-btn">
+          <img class="tool-icon-img" src="assets/icons/undo.svg" alt="">
+          <span class="tool-label">Undo</span>
+        </button>
+
+        <div class="annotation-tool-wrap">
+          <button class="tool-btn" id="clearBtn">
+            <img class="tool-icon-img" src="assets/icons/eraser.svg" alt="">
+            <span class="tool-label">Clear</span>
+          </button>
+          <div class="tool-submenu" id="clearSubmenu">
+            <button class="btn">Clear all</button>
+            <button class="btn">Clear bars</button>
+            <button class="btn">Clear distances</button>
+            <button class="btn">Clear cover</button>
+          </div>
+        </div>
+
+        <div class="annotation-tool-wrap">
+          <button class="tool-btn" id="settingsBtn">
+            <img class="tool-icon-img" src="assets/icons/settings.svg" alt="">
+            <span class="tool-label">Settings</span>
+          </button>
+
+          <div class="settings-panel" id="settingsPanel">
+            <div class="settings-title">Display settings</div>
+
+            <div class="settings-grid">
+              <div class="settings-block">
+                <div class="settings-block-title">Text</div>
+
+                <div class="settings-slider-row">
+                  <span style="font-size:14px;">Text size</span>
+                  <input type="range" min="0.5" max="2.0" step="0.1" value="1.0">
+                </div>
+
+                <div class="color-row">
+                  <span>Pass color</span>
+                  <div class="color-chip" style="background:#3ecb52;"></div>
+                </div>
+
+                <div class="color-row">
+                  <span>Fail color</span>
+                  <div class="color-chip" style="background:#e74c3c;"></div>
+                </div>
+
+                <div class="color-row">
+                  <span>Free measure color</span>
+                  <div class="color-chip" style="background:#999;"></div>
+                </div>
+              </div>
+
+              <div class="settings-block">
+                <div class="settings-block-title">Display options</div>
+
+                <div class="settings-checkbox-list">
+                  <label><input type="checkbox" checked> Masks</label>
+                  <label><input type="checkbox" checked> Diameter</label>
+                  <label><input type="checkbox" checked> Bar length</label>
+                  <label><input type="checkbox" checked> Distances</label>
+                  <label><input type="checkbox" checked> Cover</label>
+                </div>
+
+                <div class="settings-block-title" style="margin-top: 8px;">Show result types</div>
+
+                <div class="settings-checkbox-list">
+                  <label><input type="checkbox" checked> Pass</label>
+                  <label><input type="checkbox" checked> Fail</label>
+                  <label><input type="checkbox" checked> Free</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+      <div class="annotation-stats">
+        <div class="annotation-counter-box">
+          <span><span class="annotation-dot green"></span>0</span>
+          <span><span class="annotation-dot red"></span>0</span>
+          <span><span class="annotation-dot gray"></span>0</span>
+          <span class="annotation-counter-divider"></span>
+          <span>Σ 0</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const annRgbBtn = document.getElementById('annRgbBtn');
+  const annRgbdBtn = document.getElementById('annRgbdBtn');
+  const annCanvas = document.querySelector('.annotation-canvas');
+  const saveBtn = document.getElementById('saveAnnotationBtn');
+
+  const requirementChip = document.getElementById('requirementChip');
+  const requirementMenu = document.getElementById('requirementMenu');
+  const requirementChipText = document.getElementById('requirementChipText');
+
+  const autoBtn = document.getElementById('autoBtn');
+  const autoSubmenu = document.getElementById('autoSubmenu');
+
+  const clearBtn = document.getElementById('clearBtn');
+  const clearSubmenu = document.getElementById('clearSubmenu');
+
+  const settingsBtn = document.getElementById('settingsBtn');
+  const settingsPanel = document.getElementById('settingsPanel');
+
+  annRgbBtn.addEventListener('click', () => {
+    annRgbBtn.classList.add('active');
+    annRgbdBtn.classList.remove('active');
+    annCanvas.style.backgroundImage = "url('assets/sample-rebar.jpg')";
+    annCanvas.style.backgroundBlendMode = '';
+  });
+
+  annRgbdBtn.addEventListener('click', () => {
+    annRgbdBtn.classList.add('active');
+    annRgbBtn.classList.remove('active');
+    annCanvas.style.backgroundImage = "url('assets/sample-depth.jpg'), url('assets/sample-rebar.jpg')";
+    annCanvas.style.backgroundBlendMode = 'screen';
+    annCanvas.style.backgroundSize = 'contain, contain';
+    annCanvas.style.backgroundRepeat = 'no-repeat, no-repeat';
+    annCanvas.style.backgroundPosition = 'center, center';
+  });
+
+  saveBtn.addEventListener('click', () => {
+    saveBtn.textContent = '✓ Saved';
+    setTimeout(() => {
+      saveBtn.textContent = '✓ Save';
+    }, 1800);
+  });
+
+  requirementChip.addEventListener('click', (e) => {
+    e.stopPropagation();
+    requirementMenu.classList.toggle('open');
+    autoSubmenu.classList.remove('open');
+    clearSubmenu.classList.remove('open');
+    settingsPanel.classList.remove('open');
+  });
+
+  document.querySelectorAll('.requirement-option').forEach(option => {
+    option.addEventListener('click', () => {
+      requirementChipText.innerHTML = option.dataset.label.replace('\n', '<br>');
+      requirementMenu.classList.remove('open');
+    });
+  });
+
+  autoBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    autoSubmenu.classList.toggle('open');
+    requirementMenu.classList.remove('open');
+    clearSubmenu.classList.remove('open');
+    settingsPanel.classList.remove('open');
+  });
+
+  clearBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    clearSubmenu.classList.toggle('open');
+    requirementMenu.classList.remove('open');
+    autoSubmenu.classList.remove('open');
+    settingsPanel.classList.remove('open');
+  });
+
+  settingsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    settingsPanel.classList.toggle('open');
+    requirementMenu.classList.remove('open');
+    autoSubmenu.classList.remove('open');
+    clearSubmenu.classList.remove('open');
+  });
+
+  document.addEventListener('click', () => {
+    requirementMenu.classList.remove('open');
+    autoSubmenu.classList.remove('open');
+    clearSubmenu.classList.remove('open');
+    settingsPanel.classList.remove('open');
+  });
+</script>
+
+<script>
+  document.querySelectorAll('.user-menu').forEach(menu => {
+    const btn = menu.querySelector('.user-dropdown-btn');
+    const panel = menu.querySelector('.user-dropdown-panel');
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.querySelectorAll('.user-dropdown-panel').forEach(p => {
+        if (p !== panel) p.classList.remove('open');
+      });
+      panel.classList.toggle('open');
+    });
+  });
+
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.user-dropdown-panel').forEach(panel => {
+      panel.classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>

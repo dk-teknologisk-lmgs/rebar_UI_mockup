@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Preview Image — Gallery</title>
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/capture-annotation.css">
+  <style>
+    .gallery-preview-shell {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      grid-template-rows: 1fr auto;
+      min-height: 0;
+      background: var(--color-bg);
+    }
+
+    .gallery-preview-main {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px 20px 12px;
+      min-width: 0;
+      position: relative;
+    }
+
+    .gallery-preview-image-wrap {
+      width: 100%;
+      max-width: 1080px;
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .gallery-preview-image {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      border: 1px solid var(--color-border);
+      background: #ddd center/contain no-repeat;
+    }
+
+    .gallery-preview-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.92);
+      border: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+      z-index: 5;
+      user-select: none;
+    }
+
+    .gallery-preview-arrow.left { left: 12px; }
+    .gallery-preview-arrow.right { right: 12px; }
+
+    .gallery-preview-floating-actions {
+      position: relative;
+      margin-top: -30px;
+      z-index: 5;
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .gallery-preview-thumbs {
+      width: 100%;
+      max-width: 1080px;
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 8px 0 2px;
+    }
+
+    .gallery-preview-thumb {
+      width: 120px;
+      height: 80px;
+      flex: 0 0 auto;
+      border: 2px solid var(--color-border);
+      background: #ddd center/cover no-repeat;
+      cursor: pointer;
+    }
+
+    .gallery-preview-thumb.active {
+      border-color: var(--color-primary);
+    }
+
+    .gallery-preview-sidebar {
+      border-left: 1px solid var(--color-border);
+      background: white;
+      padding: 24px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow-y: auto;
+    }
+
+    .gallery-preview-sidebar-title {
+      font-family: var(--font-title);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 4px;
+    }
+
+    .gallery-preview-meta-block {
+      font-size: 14px;
+      color: var(--color-text);
+      line-height: 1.45;
+    }
+
+    .gallery-preview-meta-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .gallery-preview-caption {
+      grid-column: 1 / -1;
+      background: white;
+      border-top: 1px solid var(--color-border);
+      padding: 10px 20px;
+      font-size: 13px;
+      color: var(--color-text-muted);
+      font-style: italic;
+    }
+
+    .round-icon-btn {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      border: 1px solid var(--color-primary);
+      background: white;
+      color: var(--color-primary);
+      font-size: 22px;
+      cursor: pointer;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .round-icon-btn:hover {
+      background: var(--color-primary-soft);
+    }
+
+    @media (max-width: 1200px) {
+      .gallery-preview-shell {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto auto;
+      }
+
+      .gallery-preview-sidebar {
+        border-left: none;
+        border-top: 1px solid var(--color-border);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="app-shell preview-shell">
+
+  <header class="master-header">
+    <div class="master-logo">
+      <img src="assets/logo.png" alt="" onerror="this.style.display='none'">
+      <span class="master-logo-fallback">REBAR INSPECTION</span>
+    </div>
+
+    <div class="master-divider"></div>
+
+    <nav class="master-nav">
+      <a href="projects.html">Projects</a>
+      <span class="sep">▸</span>
+      <a href="project-workspace.html">Sønderborg Multihus</a>
+      <span class="sep">▸</span>
+      <a href="project-workspace.html">Floor 2 — East Wall</a>
+      <span class="sep">▸</span>
+      <a href="project-workspace.html">★ CA-03</a>
+      <span class="sep">▸</span>
+      <span class="current">Gallery preview</span>
+    </nav>
+
+<div class="master-actions">
+  <div class="user-menu">
+    <button class="user-dropdown-btn">Lylian Goes ▾</button>
+    <div class="user-dropdown-panel">
+      <a href="#" class="user-dropdown-item">Account</a>
+      <a href="login.html" class="user-dropdown-item">Log out</a>
+    </div>
+  </div>
+</div>
+  </header>
+
+  <div class="brand-strip"></div>
+
+  <header class="app-topbar">
+    <div class="breadcrumb">
+      <span class="current">Media preview</span>
+    </div>
+    <div class="topbar-actions">
+      <a class="btn" style="padding-left: 15px; padding-right: 15px"; href="project-workspace.html">Back</a>
+    </div>
+  </header>
+
+  <div class="gallery-preview-shell">
+    <div class="gallery-preview-main">
+      <div class="gallery-preview-image-wrap">
+        <div class="gallery-preview-image" id="galleryMainPreview"></div>
+        <div class="gallery-preview-arrow left" id="galleryPrevArrow">‹</div>
+        <div class="gallery-preview-arrow right" id="galleryNextArrow">›</div>
+      </div>
+
+      <div class="gallery-preview-floating-actions">
+        <a href="project-workspace.html">
+          <button class="round-icon-btn" title="Delete">🗑</button>
+        </a>
+        <a href="annotation.html">
+          <button class="round-icon-btn" title="Edit / annotate">✎</button>
+        </a>
+      </div>
+
+      <div class="gallery-preview-thumbs" id="galleryThumbStrip"></div>
+    </div>
+
+    <aside class="gallery-preview-sidebar">
+      <div class="gallery-preview-sidebar-title">Image details</div>
+
+      <div class="gallery-preview-meta-block">
+        <div class="gallery-preview-meta-label">Control point</div>
+        CA-03
+      </div>
+
+      <div class="gallery-preview-meta-block">
+        <div class="gallery-preview-meta-label">Date</div>
+        22 Apr 2026
+      </div>
+
+      <div class="gallery-preview-meta-block">
+        <div class="gallery-preview-meta-label">Time</div>
+        14:03
+      </div>
+
+      <div class="gallery-preview-meta-block">
+        <div class="gallery-preview-meta-label">Type</div>
+        Photo
+      </div>
+
+      <div class="gallery-preview-meta-block">
+        <div class="gallery-preview-meta-label">Resolution</div>
+        1920 × 1080
+      </div>
+
+      <div class="gallery-preview-meta-block">
+        <div class="gallery-preview-meta-label">Future area</div>
+        This panel can later contain annotations, depth coverage, compliance summary, or camera metadata.
+      </div>
+    </aside>
+
+    <div class="gallery-preview-caption" id="galleryPreviewCaption">
+      Picture 001, taken at 22 Apr 14:03, resolution: 1920×1080
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const galleryItems = [
+    { src: 'assets/sample-rebar.jpg', caption: 'Picture 001, taken at 22 Apr 14:03, resolution: 1920×1080' },
+    { src: 'assets/sample-frame-2.jpg', caption: 'Picture 002, taken at 22 Apr 14:04, resolution: 1920×1080' },
+    { src: 'assets/sample-rebar.jpg', caption: 'Recording frame 001, taken at 22 Apr 14:06, resolution: 1920×1080' },
+    { src: 'assets/sample-frame-2.jpg', caption: 'Picture 003, taken at 21 Apr 09:30, resolution: 1920×1080' },
+    { src: 'assets/sample-rebar.jpg', caption: 'Recording frame 002, taken at 21 Apr 09:31, resolution: 1920×1080' }
+  ];
+
+  let currentGalleryIndex = 0;
+
+  const galleryMainPreview = document.getElementById('galleryMainPreview');
+  const galleryThumbStrip = document.getElementById('galleryThumbStrip');
+  const galleryPreviewCaption = document.getElementById('galleryPreviewCaption');
+  const galleryPrevArrow = document.getElementById('galleryPrevArrow');
+  const galleryNextArrow = document.getElementById('galleryNextArrow');
+
+  function renderGalleryThumbs() {
+    galleryThumbStrip.innerHTML = '';
+    galleryItems.forEach((item, index) => {
+      const thumb = document.createElement('div');
+      thumb.className = 'gallery-preview-thumb' + (index === currentGalleryIndex ? ' active' : '');
+      thumb.style.backgroundImage = `url('${item.src}')`;
+      thumb.addEventListener('click', () => {
+        currentGalleryIndex = index;
+        updateGalleryPreview();
+      });
+      galleryThumbStrip.appendChild(thumb);
+    });
+  }
+
+  function updateGalleryPreview() {
+    const item = galleryItems[currentGalleryIndex];
+    galleryMainPreview.style.backgroundImage = `url('${item.src}')`;
+    galleryPreviewCaption.textContent = item.caption;
+    renderGalleryThumbs();
+  }
+
+  galleryPrevArrow.addEventListener('click', () => {
+    currentGalleryIndex = (currentGalleryIndex - 1 + galleryItems.length) % galleryItems.length;
+    updateGalleryPreview();
+  });
+
+  galleryNextArrow.addEventListener('click', () => {
+    currentGalleryIndex = (currentGalleryIndex + 1) % galleryItems.length;
+    updateGalleryPreview();
+  });
+
+  updateGalleryPreview();
+</script>
+
+<script>
+  document.querySelectorAll('.user-menu').forEach(menu => {
+    const btn = menu.querySelector('.user-dropdown-btn');
+    const panel = menu.querySelector('.user-dropdown-panel');
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      document.querySelectorAll('.user-dropdown-panel').forEach(p => {
+        if (p !== panel) p.classList.remove('open');
+      });
+      panel.classList.toggle('open');
+    });
+  });
+
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.user-dropdown-panel').forEach(panel => {
+      panel.classList.remove('open');
+    });
+  });
+</script>
+
+</body>
+</html>
